@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<HTML >
+<HEAD>
+  <META name="generator" content=
+  "HTML Tidy for Windows (vers 14 February 2006), see www.w3.org">
+  <TITLE>Авторизация</TITLE>
+  <STYLE type="text/css">
+div.c1 {border: solid 1px #999999; width: 400px; padding: 5;}
+  </STYLE>
+</HEAD>
+
+<BODY>
+  <TMPL_IF ERRMSG>
+    <TMPL_VAR NAME=ERRMSG>
+  </TMPL_IF>
+  <DIV class="c1">
+    <FORM action="<TMPL_VAR NAME=MYURI>" method="post">
+      <TABLE border="0">
+        <TR>
+          <TD>Имя пользователя:</TD>
+
+          <TD><INPUT type="text" name="login"></TD>
+        </TR>
+
+        <TR>
+          <TD>Пароль:</TD>
+
+          <TD><INPUT type="password" name="passw"></TD>
+        </TR>
+
+        <TR>
+          <TD colspan="2"><INPUT type="submit" name="Authorise"
+          value=" Вход "></TD>
+        </TR>
+      </TABLE>
+    </FORM>
+  </DIV>
+</BODY>
+</HTML>

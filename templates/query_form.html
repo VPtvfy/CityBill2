@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+
+  <TITLE>Выбор звонков</TITLE>
+  <SCRIPT language="javascript" type="text/javascript">
+<!--
+var statreload = false;
+var id;
+var childopen = false;
+
+  function CheckInOut(obj,nm)
+  {
+    return ((document.getElementById(nm).checked==false) ? obj.checked : true);
+  }
+
+  function CheckInOut1(obj,nm)
+  {
+    return (!document.getElementById(nm).checked ? true : false);
+  }
+  
+  function prepost(){
+    var atsarr = document.getElementById('stations');
+    var i;
+    var atslist='';
+    for (i=0;i<atsarr.options.length;i++){
+      if (atsarr.options[i].selected){
+        if (atslist)
+          atslist += '|';
+        atslist += atsarr.options[i].value}}
+    document.getElementById('atslist').value = atslist;
+    if (!document.getElementById("phone").value){
+      alert('Заполните все поля формы');
+      return false;}
+    return true;
+  }
+  
+  function atslistshowhide(){
+    document.getElementById('atsdiv').style.display = (document.getElementById('atsdiv').style.display == 'none' ? '' : 'none');
+    return false;
+  }
+  
+  function httpRequest() {
+	if (window.XMLHttpRequest) {
+      //создание объекта для всех браузеров кроме IE
+      requestObj = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+      //для IE
+      requestObj = new ActiveXObject("Msxml2.XMLHTTP");
+      if (!requestObj) {
+        requestObj = new ActiveXObject("Microsoft.XMLHTTP");};};};
+
+  function sendRequest (url) {
+    httpRequest();
+    requestObj.onreadystatechange = responseServer;
+    requestObj.open('GET',url,true);
+	//requestObj.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=Windows-1251");
+	requestObj.send('');
+  };
+
+  function responseServer() {
+    if (requestObj.readyState == 4) {
+      var status = requestObj.status;
+      if (status == 200) {
+    	SetData();
+      } else if (status == 400) {
+    	alert('Неправильный запрос');
+      } else if (status == 500) {
+    	alert('Внутреняя ошибка на сервере');
+      } else if (status == 503) {
+    	var time = requestObj.getResponseHeader('Retry-After')*1000;
+    	alert('Сервер перегружен.Запрос будет повторен через: '+time+' секунд');
+    	setTimeout(sendRequest(url,path),time);
+      } else {
+    	alert('Ошибочный ответ сервера');};};};
+
+  function sendData() {
+	var url = './?rm=stinfo&th=' + Math.round(9999999*Math.random());
+	sendRequest (url);};
+
+  function SetData() {
+	var s = requestObj.responseText;
+	var rows;
+	var stattext='';
+	var row;
+	var statdiv = document.getElementById('stattext');
+	var current_date = new Date();
+
+	s = s.replace(/;$/,"");
+	
+	rows=s.split(';');
+	stattext='<p>';
+	for (var i in rows){
+	  row = rows[i].split('|');
+	  stattext += '<div style="border-bottom: 1px dotted #CCCCCC;" onMouseOver="showgraph(\'' + row[0] + '\')" onMouseOut="hidegraph(\'' + row[0] + '\')"><div id="stat' + row[0] + '"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>' + row[0] + '</td><td align="right">' + row[1] + '</td></tr></table></div><div id="graph' + row[0] + '" style="display:none">За последние 30 дней по ' + row[0] + '<a href="#" onClick="return showAllGraph(\'' + row[0] + '\')"><img src="./?rm=filesgraph&atsname=' + row[0] + '&th=' + current_date.getDate() + current_date.getMonth() + current_date.getYear() + '" title="График ' + row[0] + '" border="0"></a></div></div>';}
+	//alert(s);
+	stattext += '</p>';
+	statdiv.innerHTML = stattext;
+	//document.getElementById('stattext').innerHTML = docTEXT;
+	
+	
+	if (statreload==true) setTimeout(sendData,60000);};
+
+  function statcheck(obj) {
+    if (statreload){
+      obj.innerHTML='+ Информация по файлам';
+      statreload=false;
+      document.getElementById('statframe').style.display='none';}
+    else{
+      statreload=true;
+      obj.innerHTML='-- Скрыть блок';
+      document.getElementById('statframe').style.display='';
+      sendData();};
+    return false;};
+
+  function showgraph(atsname){
+    var divobj = document.getElementById('graph'+atsname);
+    var divobj1 = document.getElementById('stat'+atsname);
+    divobj.style.display='';
+    divobj1.style.display='none';
+    return false;
+  }
+  
+  function hidegraph(atsname){
+    var divobj = document.getElementById('graph' + atsname);
+    var divobj1 = document.getElementById('stat' + atsname);
+    divobj.style.display='none';
+    divobj1.style.display='';
+    return false;
+  }
+  
+  function showAllGraph(name){
+    childopen=false;
+    id = window.open("","example","width=500,height=200,status,menu");
+    id.focus();
+    id.document.open();
+    id.document.write("<HTML><HEAD>");
+    id.document.write("<BODY>");
+    id.document.write("<CENTER>");
+    id.document.write("<H1>А здесь вы не увидите полной информации по файлам станции " + name +".</H1>");
+    id.document.write("</CENTER>");
+    id.document.write("<p align=\"right\">Писать лень...</p>")
+    id.document.write("</BODY></HTML>");
+    id.document.close();
+    setTimeout("childopen=true",1000)
+    return false;
+  }
+  
+  function hideAllGraph(){
+    if (childopen) {
+      if (id.window)
+        id.window.close();}
+    childopen=false;
+  }
+
+  //-->
+  </SCRIPT>
+  <STYLE type="text/css">
+div.c1 {border: solid 1px #999999; width: 400px; padding: 5;}
+.hidlink {
+ color: #000080;
+ text-decoration: none; 
+}
+  </STYLE>
+<LINK href="adds/dateselector.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript src="adds/popup_lib.js"></SCRIPT>
+<SCRIPT language=JavaScript src="adds/dateselector.js"></SCRIPT>
+  <link href="./templates/style.css" rel="stylesheet" type="text/css">
+</HEAD>
+
+<BODY onClick="hideAllGraph()">
+<div class="mainmenu"><a href="./">Форма запроса</a><a href="./?rm=queries">Запросы</a><a href="./?rm=files">Файлы</a></div>
+  <DIV class="c1">
+    <H3>Детализация звонков</H3>
+     <TMPL_VAR NAME="ERRMSG">
+
+    <FORM action="<TMPL_VAR NAME=MY_URI>" method="post" onSubmit="return prepost()">
+      <TABLE border="0">
+        <TR>
+          <TD valign="top">По номеру:</TD>
+
+          <TD valign="top"><INPUT type="text" name="phone" id="phone"></TD>
+
+          <TD><INPUT type="checkbox" name="chkin" id="chkin"
+          onclick="return CheckInOut(this,'chkout')" value="1" checked>
+          входящие<BR>
+          <INPUT type="checkbox" id="chkout" name="chkout" onclick=
+          "return CheckInOut(this,'chkin')" value="1" checked> исходящие</td>
+        </tr>
+        <tr>
+          <td align="right" valign="top">По станции:</td>
+          <td colspan=2><a href="#" onClick="return atslistshowhide()" id="atslisttab">Выбрать станцию</a><script language="Javascript">
+          <!--
+          var atsstring = '<TMPL_VAR NAME='atslist'>';
+          var atslist = atsstring.split('|');
+          var len = atslist.length;
+          document.write('<div id="atsdiv" style="display:none;"><SELECT id="stations" SIZE='+len+' MULTIPLE style="width:120px;border:0;">');
+          for (var i in atslist){
+            var cur_ats = atslist[i].split('^');
+            document.write('<OPTION value="'+ cur_ats[0] +'" selected>' + cur_ats[1] + '</option>');}
+          document.write('</SELECT></div>');
+          //-->
+          </script>
+          <input type='hidden' name='atslist' id='atslist' value='<TMPL_VAR NAME='atslist'>'></TD>
+        </TR>
+
+        <TR>
+          <TD align="right">с:</TD>
+
+          <TD colspan="2">
+	    <input type="text" name="fromdate" id="fromdate" value="<TMPL_VAR NAME='fromdate'>"><input type="button" value="..." onClick="popUpCalendar(this, document.getElementById('fromdate'), 'dd.mm.yyyy');">
+          </TD>
+        </TR>
+
+        <TR>
+          <TD align="right">по:</TD>
+
+          <TD colspan="2">
+	    <input type="text" name="todate" id="todate" value="<TMPL_VAR NAME='todate'>"><input type="button" value="..." onClick="popUpCalendar(this, document.getElementById('todate'), 'dd.mm.yyyy');">
+          </TD>
+        </TR>
+
+        <TR>
+          <TD colspan="2"><INPUT type="submit" name="Submit" value="Получить"></TD>
+
+          <TD align="right"><INPUT type="button" value="Выход" onClick="document.location.href='<TMPL_VAR NAME="MY_URI">?rm=logout'"></TD>
+        </TR>
+      </TABLE>
+    <input type="hidden" name="rm" value="add_query" />
+    </FORM>
+</DIV>
+<div id='stat' style="width:180px">
+<a href="#" onClick="return statcheck(this)" align="right">+ Информация по файлам</a>
+<DIV id='statframe' class="c1" style="display:none">
+За сегодня загружено файлов по станциям:
+<div id='stattext'></div>
+</DIV>
+</div>
+<!--div id="graphs"></div-->
+</BODY>
+</HTML>

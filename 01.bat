@@ -1,0 +1,2 @@
+call Scanner.pl
+pause

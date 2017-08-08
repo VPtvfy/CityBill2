@@ -1,0 +1,58 @@
+body,td,th {
+  font-family: arial, helvetica, sans-serif;
+  color: #000000;
+  font-size: 10pt;
+  background-color: #FFFFFF;
+}
+
+th {
+  background-color: #DDDDDD;
+}
+
+a {
+ color: #000080;
+ text-decoration: none; 
+}
+
+a:hover{
+ text-decoration:underline;
+}
+
+.file:visited {
+ color: #8888DE;
+}
+.green {
+  color: #00A700;
+}
+.red {
+  color: #FF0000;
+}
+.orange {
+  color: #FF5000;
+}
+.tablehead {
+  background-color: #E5E5E5;
+  font-weight: bold;
+}
+.tablehead a {
+  color: #000000;
+}
+.mainmenu {
+ display: block;
+ background-color: #F1F1F1;
+ padding: 4;
+}
+
+.mainmenu a{
+ border: 1px solid #F1F1F1;
+ padding: 1 5 1 5;
+}
+
+.mainmenu a:hover{
+ text-decoration:none;
+ color: #5858C4;
+ border: 1px solid #FFFFFF;
+ border-bottom-color: #C3C3DE;
+ border-right-color: #C3C3DE;
+ background-color: #E6E6F6;
+}

@@ -1,0 +1,28 @@
+<workbook>
+  <worksheet>
+    <row>
+      <format align="CENTER" bold="1" border="1">
+        <cell text="Абонент A" width="11" />
+        <cell text="Абонент B" width="16" />
+        <cell text="Время звонка" width="18" />
+        <cell text="Продолжительность" width="20" />
+        <cell text="station" width="20" />
+        <cell text="trunk_in" width="20" />
+        <cell text="trunk_out" width="20" />
+      </format>
+    </row>
+<loop name="CDR">
+    <row>
+      <format align="RIGHT" border="1">
+        <cell text="$CALLER" />
+        <cell text="$PEER" type="STRING" />
+        <cell text="$CALLTIME_STR" />
+        <cell text="$DURATION" />
+        <cell text="$STNAME" />
+        <cell text="$TRUNK_IN" />
+        <cell text="$TRUNK_OUT" />
+      </format>
+    </row>
+</loop>
+  </worksheet>
+</workbook>
